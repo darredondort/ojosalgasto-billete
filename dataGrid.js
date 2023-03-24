@@ -73,13 +73,14 @@ function setup() {
       pieceHighCount = ceil(pieceHighCounts[step]);
       highCol = color(colors[step]);
       valueLabel.style("color",colors[step]);
-      typeLabel.style("opacity",1);
+      // typeLabel.style("opacity",1);
 
     } else {
       step = 0;
       highCol = color(colors[step]);
       valueLabel.style("color",colors[step]);
-      typeLabel.style("opacity",1);
+      pieceHighCount = ceil(pieceHighCounts[step]);
+      // typeLabel.style("opacity",1);
     }
     pieceLowCount = gridValue - pieceHighCount;
   }
