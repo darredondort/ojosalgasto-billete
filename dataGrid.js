@@ -1,23 +1,23 @@
-// dataPieces: visualizador de segmentos basados en datos
+// dataGrid: visualizador de piezas basadas en datos
 // implementación para Ojos Al Gasto, de Politica Colectiva
 // por @darredondort
 
-// Input datos: 1 array de valores numéricos (segHighCounts), 1 array de etiquetas texturales (typeLabels). 
+// Input datos: 1 array de valores numéricos (pieceHighCounts), 1 array de etiquetas texturales (typeLabels). 
 
 // Categorías específicas billete:
 const typeLabels = ["Salud", "Obra pública", "Educación", "Nómina", "Comunicación social"];
-const segHighCounts = [10.77, 7.21, 39.20, 13.88, 0.15]
+const pieceHighCounts = [10.77, 7.21, 39.20, 13.88, 0.15];
 
 // Categorías COG
 // const typeLabels = ["Servicios Personales", "Materiales y Suministros", "Servicios Generales", "Transferencia, asignaciones, subsidios y otras ayudas", "Bienes muebles, inmuebles e intangibles", "Inversión", "Inversiones financieras y otras previsiones", "Participaciones y aportaciones", "Deuda pública"];
-// const segHighCounts = [28.99, 1.16, 4.25, 37.73, 0.46, 6.95, 0.39, 19.87, 2.36];
+// const pieceHighCounts = [28.99, 1.16, 4.25, 37.73, 0.46, 6.95, 0.39, 19.87, 2.36];
 
 const colors = ["#F7D793", "#EF593F", "#175349", "#50A2BF", "#EE77A7", "#01BAFF", "#00E4AE", "#FE8550", "#FF02FE"];
 // const colors = ["#F2BA36", "#EF593F", "#175349", "#50A2BF", "#EF593F", "#F2BA36", "#175349", "#50A2BF"];
 let step = 0;
 let timer = 0;
-let timerInt = 2; // intervalo de segundos entre un cambio de vista y otro
-let fps = 60; // intervalo de segundos entre un cambio de vista y otro
+let timerInt = 2; // intervalo de pieceundos entre un cambio de vista y otro
+let fps = 60; // intervalo de pieceundos entre un cambio de vista y otro
 
 let highCol;
 let highAlpha = 200;
@@ -28,14 +28,14 @@ let typeLabel;
 let nextGrid;
 
 let gridValue = 100;
-let segHighCount = segHighCounts[0];
-let segLowCount = gridValue - segHighCount;
+let pieceHighCount = pieceHighCounts[0];
+let pieceLowCount = gridValue - pieceHighCount;
 
-const segWidth = 49;
-const segHeight = 14;
-const segPadding = 5;
+const pieceWidth = 49;
+const pieceHeight = 14;
+const piecePadding = 5;
 
-let segments = [];
+let pieces = [];
 let posX = [];
 let posY = [];
 
@@ -52,7 +52,7 @@ function setup() {
 
   highCol = color(colors[0]);
 
-  // Crear una retícula con nuevas instancias de segmentos de 24 filas x 4 columnas.
+  // Crear una retícula con nuevas instancias de piezas de 24 filas x 4 columnas.
   for (let i = 0; i < 25; i++) {
     for (let j = 0; j < 4; j++) {
       let x = 0;
@@ -62,15 +62,15 @@ function setup() {
       let targetY = i * 18;
       posX.push(targetX);
       posY.push(targetY);
-      segments.push(new Segment(targetX, targetY, segWidth, segHeight, segHighCounts[step], typeLabels[step]));
+      pieces.push(new DataPiece(targetX, targetY, pieceWidth, pieceHeight, pieceHighCounts[step], typeLabels[step]));
     }
   }
 
   nextGrid = function() {
     if (step < typeLabels.length - 1) {
       step++
-      // segHighCount = round(segHighCounts[step]);
-      segHighCount = ceil(segHighCounts[step]);
+      // pieceHighCount = round(pieceHighCounts[step]);
+      pieceHighCount = ceil(pieceHighCounts[step]);
       highCol = color(colors[step]);
       valueLabel.style("color",colors[step]);
       typeLabel.style("opacity",1);
@@ -81,28 +81,28 @@ function setup() {
       valueLabel.style("color",colors[step]);
       typeLabel.style("opacity",1);
     }
-    segLowCount = gridValue - segHighCount;
+    pieceLowCount = gridValue - pieceHighCount;
   }
 }
 
 function draw() {
-  for (const [i, segment] of segments.entries()) {
-    let segmentCol = color("#FFC7DB");
-    segmentCol.setAlpha(0.1)
-    segment.setCol(segmentCol, lowAlpha);
-    segment.draw();
+  for (const [i, piece] of pieces.entries()) {
+    let pieceCol = color("#FFC7DB");
+    pieceCol.setAlpha(0.1)
+    piece.setCol(pieceCol, lowAlpha);
+    piece.draw();
     let labelStrokeCol = color(255, 200, 0);
-    segment.setLabelStroke(10, labelStrokeCol, 200);
+    piece.setLabelStroke(10, labelStrokeCol, 200);
 
-    if (i > segLowCount - 1) {
-      segments[i].setCol(highCol, highAlpha);
-      segments[i].draw();
+    if (i > pieceLowCount - 1) {
+      pieces[i].setCol(highCol, highAlpha);
+      pieces[i].draw();
     }
   }
-  valueLabel.html(`$${segHighCounts[step]}`);
+  valueLabel.html(`$${pieceHighCounts[step]}`);
   typeLabel.html(typeLabels[step]);
 
-  // cambiar vista y datos de retícula cada timerInt segundos, calculados por frameRate actual de p5.js (pasos en bucle)
+  // cambiar vista y datos de retícula cada timerInt pieceundos, calculados por frameRate actual de p5.js (pasos en bucle)
   // if (timer < round(timerInt*frameRate())) {
   if (timer < round(timerInt*fps)) {
     timer++;
@@ -118,7 +118,7 @@ function draw() {
 //   nextGrid()
 // }
 
-class Segment {
+class DataPiece {
   constructor(x, y, newWidth, newHeight, value, label) {
     this.x = x;
     this.y = y;
