@@ -1,0 +1,71 @@
+#body-billete {
+  margin: 0;
+}
+
+#grid-holder {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  width: 207px;
+  height: 449px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#back-holder {
+  margin: 0;
+  padding: 0;
+  background: url('./img/fondo-billete-01.png') no-repeat center center fixed;
+  background-size: cover;
+  opacity: 0.5;
+  background-repeat: no-repeat;
+  background-size: 207px 449px;
+  background-position: 0 0;
+  opacity: 0.25;
+  position: absolute;
+  width: 207px;
+  height: 449px;
+}
+
+#grid-holder canvas {
+  mix-blend-mode: multiply;
+  position: absolute;
+  flex: 0 0 100%;
+}
+
+#label-billete,
+#value-billete {
+  font-family: "Monument Extended", sans-serif;
+  text-align: center;
+  margin: 6px;
+  width: 100%;
+  height: auto;
+  z-index: 2;
+  filter: drop-shadow(0 0 1.2rem #C39AA8);
+}
+
+#value-cont {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+#label-cont {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+}
+
+#label-billete {
+  /* top: 200px; */
+  /* align-self: flex-end; */
+
+}
+
+#value-billete {
+  /* top: 200px; */
+  font-size: 32px;
+  align-self: flex-end;
+}
