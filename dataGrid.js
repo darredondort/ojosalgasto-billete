@@ -70,18 +70,24 @@ function setup() {
     if (step < typeLabels.length - 1) {
       step++
       // pieceHighCount = round(pieceHighCounts[step]);
-      pieceHighCount = ceil(pieceHighCounts[step]);
+      pieceHighCount = pieceHighCounts[step];
       highCol = color(colors[step]);
       valueLabel.style("color",colors[step]);
-      // typeLabel.style("opacity",1);
-
     } else {
       step = 0;
+      pieceHighCount = pieceHighCounts[step];
       highCol = color(colors[step]);
       valueLabel.style("color",colors[step]);
-      pieceHighCount = ceil(pieceHighCounts[step]);
-      // typeLabel.style("opacity",1);
     }
+    console.log(pieceHighCount);
+
+    // redondea hacia arriba si es menor a $1
+    if (pieceHighCounts[step] < 1) {
+      pieceHighCount = ceil(pieceHighCount);
+    } else {
+      pieceHighCount = round(pieceHighCount);
+    }
+    console.log(pieceHighCount);
     pieceLowCount = gridValue - pieceHighCount;
   }
 }
