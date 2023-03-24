@@ -1,4 +1,4 @@
-// dataGrid: visualizador de piezas basadas en datos
+// dataGrid: visualizador de piezas basadas en datos en HTML Canvas.
 // implementación para Ojos Al Gasto, de Politica Colectiva
 // por @darredondort
 
@@ -14,6 +14,7 @@ const pieceHighCounts = [10.77, 7.21, 39.20, 13.88, 0.15];
 
 const colors = ["#F7D793", "#EF593F", "#175349", "#50A2BF", "#EE77A7", "#01BAFF", "#00E4AE", "#FE8550", "#FF02FE"];
 // const colors = ["#F2BA36", "#EF593F", "#175349", "#50A2BF", "#EF593F", "#F2BA36", "#175349", "#50A2BF"];
+
 let step = 0;
 let timer = 0;
 let timerInt = 2; // intervalo de segundos entre un cambio de vista y otro
