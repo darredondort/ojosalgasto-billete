@@ -16,8 +16,8 @@ const colors = ["#F7D793", "#EF593F", "#175349", "#50A2BF", "#EE77A7", "#01BAFF"
 // const colors = ["#F2BA36", "#EF593F", "#175349", "#50A2BF", "#EF593F", "#F2BA36", "#175349", "#50A2BF"];
 let step = 0;
 let timer = 0;
-let timerInt = 2; // intervalo de pieceundos entre un cambio de vista y otro
-let fps = 60; // intervalo de pieceundos entre un cambio de vista y otro
+let timerInt = 2; // intervalo de segundos entre un cambio de vista y otro
+let fps = 60; // intervalo de segundos entre un cambio de vista y otro
 
 let highCol;
 let highAlpha = 200;
@@ -109,7 +109,7 @@ function draw() {
   valueLabel.html(`$${pieceHighCounts[step]}`);
   typeLabel.html(typeLabels[step]);
 
-  // cambiar vista y datos de retícula cada timerInt pieceundos, calculados por frameRate actual de p5.js (pasos en bucle)
+  // cambiar vista y datos de retícula cada timerInt segundos, calculados por frameRate actual de p5.js (pasos en bucle)
   // if (timer < round(timerInt*frameRate())) {
   if (timer < round(timerInt*fps)) {
     timer++;
