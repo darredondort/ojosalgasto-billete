@@ -1,4 +1,4 @@
-// dataPiexces: visualizador de piezas basadas en datos en HTML Canvas.
+// dataPieces: visualizador de piezas basadas en datos en HTML Canvas.
 // implementación para Ojos Al Gasto, de Politica Colectiva
 // por @darredondort
 
@@ -14,11 +14,8 @@ let pieceStep = 0;
 let pieceSum = 0;
 
 let step = 0;
-let timer = 0;
-let timerInt = 2; // intervalo de segundos entre un cambio de vista y otro
-let fps = 60; // intervalo de segundos entre un cambio de vista y otro
 
-let highCol;
+// let highCol;
 let highAlpha = 200;
 let lowAlpha = 40;
 
@@ -27,10 +24,9 @@ let pieceCol;
 
 let canvas;
 let typeLabel;
-let nextGrid;
+// let nextGrid;
 
 let gridValue = 100;
-// let pieceHighCount = pieceCounts[0];
 let pieceCurrCount = pieceCounts[step];
 let pieceLowCount = gridValue - pieceCurrCount;
 
@@ -47,18 +43,16 @@ function setup() {
   canvas.parent("grid-holder");
 
   typeLabel = select("#label-billete");
-  // typeLabel.style("color",colors[step]);
 
   valueLabel = select("#value-billete");
-  valueLabel.style("color",colors[step]);
-  // console.log(valueLabel);
+  valueLabel.style("color", colors[step]);
 
   highCol = color(colors[0]);
 
   currCol = colors[step];
   pieceCol = color(currCol);
 
-  // Crear una retícula con nuevas instancias de piezas de 24 filas x 4 columnas.
+  // Crear una retícula con nuevas instancias de piezas de 25 filas x 4 columnas.
   for (let i = 0; i < 25; i++) {
     for (let j = 0; j < 4; j++) {
       let x = 0;
@@ -68,184 +62,76 @@ function setup() {
       let targetY = i * 18;
       posX.push(targetX);
       posY.push(targetY);
-      // pieces.push(new DataPiece(targetX, targetY, pieceWidth, pieceHeight, pieceCounts[step], typeLabels[step]));
       pieces.push(new DataPiece(targetX, targetY, pieceWidth, pieceHeight, "#383838", typeLabels[step]));
     }
   }
 
-  // nextGrid = function() {
-  //   if (step < typeLabels.length - 1) {
-  //     step++
-  //     // pieceHighCount = round(pieceCounts[step]);
-  //     pieceHighCount = pieceCounts[step];
-  //     highCol = color(colors[step]);
-  //     valueLabel.style("color",colors[step]);
-  //   } else {
-  //     step = 0;
-  //     pieceHighCount = pieceCounts[step];
-  //     highCol = color(colors[step]);
-  //     valueLabel.style("color",colors[step]);
-  //   }
-  //   console.log(pieceHighCount);
-
-  //   // redondea hacia arriba si es menor a $1
-  //   if (pieceCounts[step] < 1) {
-  //     pieceHighCount = ceil(pieceHighCount);
-  //   } else {
-  //     pieceHighCount = round(pieceHighCount);
-  //   }
-  //   console.log(pieceHighCount);
-  //   pieceLowCount = gridValue - pieceHighCount;
-  // }
   if (step < typeLabels.length) {
 
 
     for (const [i, piece] of pieces.entries()) {
-      // if (pieceStep < pieces.length) {
-  
-      // if (pieceStep < gridValue) {
-  
-        // let currTreshold = pieces.length - pieceCurrCount
-        // pieceCurrCount = floor(pieceCounts[step]);
-  
-        if (pieceCounts[step] < 1) {
-          pieceCurrCount = ceil(pieceCounts[step]);
-        } else {
-          pieceCurrCount = round(pieceCounts[step]);
-        }
-  
-  
-  
-  
-  
-        console.log("pieceStep: ", pieceStep);
-        console.log("pieceCurrCount: ", pieceCurrCount);
-        console.log("curr typeLabels: ", typeLabels[step]);
-  
+      if (pieceCounts[step] < 1) {
+        pieceCurrCount = ceil(pieceCounts[step]);
+      } else {
+        pieceCurrCount = round(pieceCounts[step]);
+      }
+
+
+      console.log("pieceStep: ", pieceStep);
+      console.log("pieceCurrCount: ", pieceCurrCount);
+      console.log("curr typeLabels: ", typeLabels[step]);
+
+
+      if (pieceStep < pieceCurrCount) {
         
-          if (pieceStep < pieceCurrCount) {
-            pieceStep++;
-    
-          } else {
-            pieceStep = 1;
-            step++;
-          }
-  
-          currCol = colors[step];
-          pieceCol = color(currCol);
-          piece.label = typeLabels[step];
-          piece.value = pieceCurrCount;
-    
-          pieceCol.setAlpha(1)
-          piece.setCol(pieceCol, highAlpha);
-          piece.draw();
+        pieceStep++;
 
-          // let labelStrokeCol = color(255, 200, 0);
-          // piece.setLabelStroke(100, labelStrokeCol, 200);
- 
-          
-  
-  
-  
-  
-  
-  
-      // } else {
-      //   pieceStep = 0;
-      //   step = 0;
-  
-      // }
-  
-      // pieceCurrCount = pieceCounts[step];
-  
-  
-  
-  
+      } else {
+        pieceStep = 1;
+        step++;
+      }
 
-  
-      // if (i > pieceLowCount - 1) {
-      //   pieces[i].setCol(highCol, highAlpha);
-      //   pieces[i].draw();
-      // }
+      currCol = colors[step];
+      pieceCol = color(currCol);
+      piece.label = typeLabels[step];
+      piece.value = pieceCurrCount;
+
+      pieceCol.setAlpha(1)
+      piece.setCol(pieceCol, highAlpha);
+      piece.draw();
     }
 
-  
+
   } else {
     pieceStep = 0;
     step = 0;
   }
-    pieceSum += pieceCurrCount;
-    console.log("pieceSum: ",pieceSum);
+  pieceSum += pieceCurrCount;
+  console.log("pieceSum: ", pieceSum);
 
 
-    valueLabel.style("color", "#000000");
-    valueLabel.html("$100");
-    typeLabel.html("Selecciona una categoría");
+  valueLabel.style("color", "#000000");
+  valueLabel.html("$100");
+  typeLabel.html("Selecciona una categoría");
 }
 
 function draw() {
-
- 
-
-  
-
-  // cambiar vista y datos de retícula cada timerInt segundos, calculados por frameRate actual de p5.js (pasos en bucle)
-  // if (timer < round(timerInt*frameRate())) {
-
-  // if (timer < round(timerInt*fps)) {
-  //   timer++;
-  // } else {
-  //   nextGrid();
-  //   timer = 0;
-  // }
-
-  // console.log(timer);
-
   for (let piece of pieces) {
     let currDist = dist(mouseX, mouseY, piece.x, piece.y);
 
     if (mouseIsPressed) {
-      if (currDist <= piece.width/2 || currDist <= piece.height/2) {
+      if (currDist <= piece.width / 2 || currDist <= piece.height / 2) {
         console.log("curr piece.label", piece.label);
-  
-  
-  
+
         valueLabel.style("color", piece.col);
-        valueLabel.html(piece.value);
+        valueLabel.html(`$${piece.value}`);
         typeLabel.html(piece.label);
-      
       }
     }
-
   }
 
 }
 
-
-
-// function mousePressed() {
-//   for (const piece of pieces) {
-//     let currDist = dist(mouseX, mouseY, piece.x, piece.y);
-
-//     if (currDist <= piece.width/2 && currDist <= piece.height/2) {
-//       console.log("curr piece.label", piece.label);
-
-
-
-//       valueLabel.style("color", piece.col);
-//       valueLabel.html(piece.value);
-//       typeLabel.html(piece.label);
-    
-//     }
-//   }
-  
-// }
-
-
-// cambiar vista y datos de retícula con clic (pasos en bucle)
-// function mousePressed() {
-//   nextGrid()
-// }
 
 class DataPiece {
   constructor(x, y, newWidth, newHeight, value, label) {
@@ -269,7 +155,6 @@ class DataPiece {
     this.labelStrokeWeight = 1;
     this.speed = 5;
   }
-  
 
   moveTo(x, y, speed) {
     let target = createVector(x, y);
