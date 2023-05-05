@@ -5,7 +5,7 @@
 #grid-holder {
   margin: 0;
   padding: 0;
-  position: absolute;
+  /* position: absolute; */
   width: 207px;
   height: 449px;
   display: flex;
@@ -17,7 +17,7 @@
 #back-holder {
   margin: 0;
   padding: 0;
-  background: url('./img/fondo-billete-01.png') no-repeat center center fixed;
+  background: url('./img/fondo-billete-ilustrado-BW-01.png') no-repeat center center fixed;
   background-size: cover;
   opacity: 0.5;
   background-repeat: no-repeat;
@@ -37,7 +37,8 @@
 
 #label-billete,
 #value-billete {
-  font-family: "Monument Extended", sans-serif;
+  /* font-family: "Monument Extended", sans-serif; */
+  /* font-family: "Gotham", sans-serif; */
   text-align: center;
   margin: 6px;
   width: 100%;
@@ -45,6 +46,19 @@
   z-index: 2;
   filter: drop-shadow(0 0 1.2rem #C39AA8);
 }
+
+
+#value-billete {
+  font-family: "Monument Extended", sans-serif;
+  /* font-weight: bold; */
+}
+
+#label-billete {
+  font-family: "Gotham", sans-serif;
+  font-weight: bold;
+}
+
+
 
 #value-cont {
   flex: 1;
@@ -68,4 +82,13 @@
   /* top: 200px; */
   font-size: 32px;
   align-self: flex-end;
+}
+
+.out-labels-cont {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 207px;
+  text-align: left;
+  margin-top: 20px;
 }

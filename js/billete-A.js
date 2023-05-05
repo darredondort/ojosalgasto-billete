@@ -1,4 +1,4 @@
-// dataGrid: visualizador de piezas basadas en datos en HTML Canvas.
+// dataPieces: visualizador de piezas basadas en datos en HTML Canvas.
 // implementación para Ojos Al Gasto, de Politica Colectiva
 // por @darredondort
 
