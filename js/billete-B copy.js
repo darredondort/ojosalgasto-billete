@@ -2,12 +2,12 @@
 // implementación para Ojos Al Gasto, de Politica Colectiva
 // por @darredondort
 
-// Input datos: un array de valores numéricos (pieceValues), un array de etiquetas texturales (typeLabels). 
+// Input datos: un array de valores numéricos (pieceCounts), un array de etiquetas texturales (typeLabels). 
 // Categorías COG
 const typeLabels = ["Servicios personales", "Materiales y suministros", "Servicios generales", "Inversiones financieras y otras provisiones", "Deuda pública", "Participaciones y aportaciones", "Bienes muebles, inmuebles e intangibles", "Transferencias, asignaciones, subsidios y otras ayudas", "Inversión pública"];
-const pieceValues = [28.99, 1.16, 4.25, 37.73, 0.46, 6.95, 0.39, 19.87, 2.36];
+const pieceCounts = [28.99, 1.16, 4.25, 37.73, 0.46, 6.95, 0.39, 19.87, 2.36];
 
-const colors = ["#FFCDFD", "#8AB8C7", "#EB74A4", "#FE8550", "#376473", "#A43367", "#FDBB38", "#1D776E", "#8AB8C7"];
+const colors = ["#FFCDFD", "#CCFBFF", "#EB74A4", "#FE8550", "#376473", "#A43367", "#FDBB38", "#1D776E", "#8AB8C7"];
 
 
 let pieceStep = 0;
@@ -24,10 +24,10 @@ let pieceCol;
 
 let canvas;
 let typeLabel;
-let updatePieces;
+let nextGrid;
 
 let gridValue = 100;
-let pieceCurrCount = pieceValues[step];
+let pieceCurrCount = pieceCounts[step];
 let pieceLowCount = gridValue - pieceCurrCount;
 
 const pieceWidth = 49;
@@ -37,9 +37,6 @@ const piecePadding = 5;
 let pieces = [];
 let posX = [];
 let posY = [];
-
-
-
 
 function setup() {
   canvas = createCanvas(207, 449);
@@ -69,55 +66,48 @@ function setup() {
     }
   }
 
+  if (step < typeLabels.length) {
 
-  updatePieces = function () {
-    clear();
-    step = 0;
-    pieceStep = 0;
-  
+
     for (const [i, piece] of pieces.entries()) {
-      if (step < typeLabels.length) {
-  
-        if (pieceValues[step] < 1) {
-          pieceCurrCount = ceil(pieceValues[step]);
-        } else {
-          pieceCurrCount = round(pieceValues[step]);
-        }
-  
-       
-        if (step < colors.length) {
-          currCol = colors[step];
-          pieceCol = color(currCol);
-          piece.label = typeLabels[step];
-          piece.value = pieceCurrCount;
-  
-          pieceCol.setAlpha(1);
-          piece.setCol(pieceCol, highAlpha);
-          piece.draw();
-  
-          let currDistX = abs(mouseX - piece.x - piece.width / 2);
-          let currDistY = abs(mouseY - piece.y - piece.height / 2);
-          if (currDistX <= piece.width / 2 && currDistY <= piece.height / 2) {
-            valueLabel.style("color", piece.col);
-            valueLabel.html(`$${piece.value}`);
-            typeLabel.html(piece.label);
-          }
-        }
+      if (pieceCounts[step] < 1) {
+        pieceCurrCount = ceil(pieceCounts[step]);
+      } else {
+        pieceCurrCount = round(pieceCounts[step]);
+      }
+
+
+      console.log("pieceStep: ", pieceStep);
+      console.log("pieceCurrCount: ", pieceCurrCount);
+      console.log("curr typeLabels: ", typeLabels[step]);
+
+
+      if (pieceStep < pieceCurrCount) {
         
-        pieceSum += pieceCurrCount;
-        console.log("pieceSum: ", pieceSum);
-        if (pieceStep < pieceCurrCount) {
-          pieceStep++;
-        } else {
-          pieceStep = 1;
-          step++;
-        }
-  
-      } 
+        pieceStep++;
+
+      } else {
+        pieceStep = 1;
+        step++;
+      }
+
+      currCol = colors[step];
+      pieceCol = color(currCol);
+      piece.label = typeLabels[step];
+      piece.value = pieceCurrCount;
+
+      pieceCol.setAlpha(1)
+      piece.setCol(pieceCol, highAlpha);
+      piece.draw();
     }
+
+
+  } else {
+    pieceStep = 0;
+    step = 0;
   }
-  
-  updatePieces();
+  pieceSum += pieceCurrCount;
+  console.log("pieceSum: ", pieceSum);
 
 
   valueLabel.style("color", "#000000");
@@ -125,13 +115,21 @@ function setup() {
   typeLabel.html("Selecciona una categoría");
 }
 
-
 function draw() {
+  for (let piece of pieces) {
+    let currDist = dist(mouseX, mouseY, piece.x, piece.y);
 
-}
+    if (mouseIsPressed) {
+      if (currDist <= piece.width / 2 || currDist <= piece.height / 2) {
+        console.log("curr piece.label", piece.label);
 
-function mousePressed() {
-  updatePieces();
+        valueLabel.style("color", piece.col);
+        valueLabel.html(`$${piece.value}`);
+        typeLabel.html(piece.label);
+      }
+    }
+  }
+
 }
 
 
@@ -156,6 +154,25 @@ class DataPiece {
     this.labelStrokeAlpha = 255;
     this.labelStrokeWeight = 1;
     this.speed = 5;
+  }
+
+  moveTo(x, y, speed) {
+    let target = createVector(x, y);
+    let position = createVector(this.x, this.y);
+    let direction = target.sub(position);
+    let distance = direction.mag();
+    this.speed = speed;
+
+    if (distance > 1) {
+      direction.normalize();
+      direction.mult(this.speed);
+      position.add(direction);
+      this.x = position.x;
+      this.y = position.y;
+    } else {
+      this.x = x;
+      this.y = y;
+    }
   }
 
   update() {
