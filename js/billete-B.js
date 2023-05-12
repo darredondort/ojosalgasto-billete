@@ -3,12 +3,18 @@
 // por @darredondort
 
 // Input datos: un array de valores numéricos (pieceValues), un array de etiquetas texturales (typeLabels). 
+let localidad = "San Luis Potosí";
+let uso = "gastó";
+let año = "2021";
+
 // Categorías COG
 const typeLabels = ["Servicios personales", "Materiales y suministros", "Servicios generales", "Inversiones financieras y otras provisiones", "Deuda pública", "Participaciones y aportaciones", "Bienes muebles, inmuebles e intangibles", "Transferencias, asignaciones, subsidios y otras ayudas", "Inversión pública"];
 const pieceValues = [28.99, 1.16, 4.25, 37.73, 0.46, 6.95, 0.39, 19.87, 2.36];
 
-const colors = ["#FFCDFD", "#8AB8C7", "#EB74A4", "#FE8550", "#376473", "#A43367", "#FDBB38", "#1D776E", "#8AB8C7"];
+const colors = ["#FFCDFD", "#8AB8C7", "#EB74A4", "#FE8550", "#608D9C", "#A43367", "#FDBB38", "#1D776E", "#8AB8C7"];
 
+let offscreenBack;
+let offscreenCanvas;
 
 let pieceStep = 0;
 let pieceSum = 0;
@@ -44,6 +50,9 @@ let posY = [];
 function setup() {
   canvas = createCanvas(207, 449);
   canvas.parent("grid-holder");
+
+  offscreenBack = createGraphics(480, 420);
+  offscreenCanvas = createGraphics(width, height);
 
   typeLabel = select("#label-billete");
 
@@ -132,6 +141,72 @@ function draw() {
 
 function mousePressed() {
   updatePieces();
+}
+
+function keyPressed(uso, localidad) {
+  if (key === ' ') { // Check if the spacebar key is pressed
+    saveSummary();
+  }
+}
+
+function saveSummary() {
+  let sumMargin = 26;
+  let scaleFactor = 0.75;
+  let titleSize = 22;
+
+  offscreenBack.clear();
+  offscreenCanvas.clear();
+
+  offscreenBack.background(255);
+
+  loadFont('./fonts/Gotham Black.otf', boldFont =>
+  loadFont('./fonts/Gotham Medium.ttf', medFont =>
+
+  loadImage('./img/fondo-billete-ilustrado-BW-01.png', img => {
+    offscreenBack.image(img, sumMargin, sumMargin*2.5, width*scaleFactor, height*scaleFactor);
+    offscreenBack.background(255,100);
+    offscreenCanvas.image(canvas, 0, 0); 
+    offscreenBack.image(offscreenCanvas, sumMargin, sumMargin*2.5, width*scaleFactor, height*scaleFactor);
+
+    // textos título
+    offscreenBack.textAlign(LEFT, CENTER);
+    offscreenBack.textFont(boldFont);
+    offscreenBack.fill(0);
+    offscreenBack.textSize(titleSize);
+    offscreenBack.textLeading(titleSize);
+    offscreenBack.text(`${localidad} \nen un billete.`, width, sumMargin*2);
+    offscreenBack.textFont(medFont);
+    offscreenBack.textSize(titleSize/2);
+    offscreenBack.text(`Así ${uso} su presupuesto en 2021:`, width, sumMargin*4);
+    
+    // leyenda colores y valores
+    let legSep = 30;
+    let legSize = 9;
+    for (let i = 0; i < typeLabels.length; i++) {
+      offscreenBack.fill(colors[i]);
+      offscreenBack.noStroke();
+      offscreenBack.rectMode(CENTER);
+      // offscreenBack.rect(width, sumMargin*5 + legSep*i, 14, 14);
+
+      offscreenBack.fill(colors[i]);
+      offscreenBack.textFont(boldFont);
+      offscreenBack.textSize(legSize*1.25);
+      offscreenBack.textAlign(LEFT, BOTTOM);
+      offscreenBack.text(`$${pieceValues[i]}`, width, sumMargin*5 + legSep*i + legSize/2);
+
+      offscreenBack.fill(0);
+      offscreenBack.textFont(medFont);
+      offscreenBack.textSize(legSize);
+      offscreenBack.textAlign(LEFT, BOTTOM);
+      offscreenBack.text(typeLabels[i], width, sumMargin*5 + legSep*i + legSize*1.40);
+    }
+
+    loadImage('./img/polcol-logo-negro-500px-01.png', logoPolCol => {
+      offscreenBack.image(logoPolCol, sumMargin, sumMargin, 100, 21);
+    // guardar png
+    saveCanvas(offscreenBack, `Billete ${localidad} ${año}`, 'png'); // Save the offscreen canvas as a .png file with the given name
+    })
+  })));
 }
 
 
