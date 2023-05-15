@@ -6,7 +6,7 @@
 let localidad = "San Luis Potosí";
 let uso = "gastó";
 let año = "2021";
-let clasificador = "Clasificador por Objeto del Gasto"
+let clasificador = "Clasificador por Objeto del Gasto";
 
 // Categorías COG
 const typeLabels = ["Servicios personales", "Materiales y suministros", "Servicios generales", "Inversiones financieras y otras provisiones", "Deuda pública", "Participaciones y aportaciones", "Bienes muebles, inmuebles e intangibles", "Transferencias, asignaciones, subsidios y otras ayudas", "Inversión pública"];
@@ -128,7 +128,6 @@ function setup() {
   }
   
   updatePieces();
-
 
   valueLabel.style("color", "#000000");
   valueLabel.html("$100");
