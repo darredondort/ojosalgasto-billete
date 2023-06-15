@@ -7,12 +7,17 @@ let localidad = "San Luis Potosí";
 let uso = "gastó";
 let año = "2021";
 let clasificador = "Clasificador por Objeto del Gasto";
+let fuente = "Fuente: Datos obtenidos de la Cuenta Pública Oficial del Gobierno";
 
 // Categorías COG
 const typeLabels = ["Servicios personales", "Materiales y suministros", "Servicios generales", "Inversiones financieras y otras provisiones", "Deuda pública", "Participaciones y aportaciones", "Bienes muebles, inmuebles e intangibles", "Transferencias, asignaciones, subsidios y otras ayudas", "Inversión pública"];
 const pieceValues = [28.99, 1.16, 4.25, 37.73, 0.46, 6.95, 0.39, 19.87, 2.36];
 
-const colors = ["#FFCDFD", "#8AB8C7", "#EB74A4", "#FE8550", "#608D9C", "#A43367", "#FDBB38", "#1D776E", "#8AB8C7"];
+// colores anteriores
+// const colors = ["#FFCDFD", "#8AB8C7", "#EB74A4", "#FE8550", "#608D9C", "#A43367", "#FDBB38", "#1D776E", "#8AB8C7"];
+
+// colores nuevos
+const colors = ["#FE8550", "#376473", "#B6E4F4", "#EB74A4", "#7FBCAC", "#A33367", "#FFD24F", "#1D776E", "#00B9FF"];
 
 let offscreenBack;
 let offscreenCanvas;
@@ -52,8 +57,8 @@ function setup() {
   canvas = createCanvas(207, 449);
   canvas.parent("grid-holder");
 
-  offscreenBack = createGraphics(480, 420);
-  offscreenCanvas = createGraphics(width, height);
+  // offscreenBack = createGraphics(480, 420);
+  // offscreenCanvas = createGraphics(width, height);
 
   typeLabel = select("#label-billete");
 
@@ -154,6 +159,15 @@ function saveSummary() {
   let scaleFactor = 0.75;
   let titleSize = 22;
 
+
+  offscreenBack = createGraphics(480, 420);
+  offscreenCanvas = createGraphics(width, height);
+
+
+  let density = displayDensity();
+  offscreenBack.pixelDensity(density);
+  offscreenCanvas.pixelDensity(density);
+
   offscreenBack.clear();
   offscreenCanvas.clear();
 
@@ -178,6 +192,12 @@ function saveSummary() {
     offscreenBack.textFont(medFont);
     offscreenBack.textSize(titleSize/2);
     offscreenBack.text(`Así ${uso} su presupuesto en 2021:`, width, sumMargin*4);
+    offscreenBack.textSize(titleSize/3.5);
+
+    let clasificadorTitle = clasificador.toUpperCase();
+    // offscreenBack.text(clasificadorTitle, width, offscreenBack.height - sumMargin );
+    offscreenBack.text(`${clasificadorTitle} \n ${fuente}`, width, offscreenBack.height - sumMargin/1.5);
+    
     
     // leyenda colores y valores
     let legSep = 30;
@@ -201,10 +221,19 @@ function saveSummary() {
       offscreenBack.text(typeLabels[i], width, sumMargin*5 + legSep*i + legSize*1.40);
     }
 
-    loadImage('./img/polcol-logo-negro-500px-01.png', logoPolCol => {
-      offscreenBack.image(logoPolCol, sumMargin, sumMargin, 100, 21);
-    // guardar png
-    saveCanvas(offscreenBack, `Billete ${localidad} ${año}`, 'png'); // Save the offscreen canvas as a .png file with the given name
+    loadImage('./img/sello-pc-negro.png', logoPolCol => {
+      offscreenBack.image(logoPolCol, offscreenBack.width - sumMargin*2.5 , sumMargin/2, 36, 36);
+
+      loadImage('./img/pc_assets_logoOjos-hor.png', logoOjos => {
+        offscreenBack.image(logoOjos, sumMargin, sumMargin/2, 144, 41.48);
+      
+        // guardar png
+        saveCanvas(offscreenBack, `Billete ${localidad} ${año}`, 'png'); // Save the offscreen canvas as a .png file with the given name
+      })
+ 
+
+
+
     })
   })));
 }
