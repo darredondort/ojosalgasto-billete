@@ -154,35 +154,29 @@ function keyPressed(uso, localidad) {
   }
 }
 
+
 function saveSummary() {
   let sumMargin = 26;
   let scaleFactor = 0.75;
   let titleSize = 22;
 
-
-  offscreenBack = createGraphics(480, 420);
-  offscreenCanvas = createGraphics(width, height);
-
-
-  let density = displayDensity();
-  offscreenBack.pixelDensity(density);
-  offscreenCanvas.pixelDensity(density);
+  // Set pixelDensity when creating the graphics
+  let offscreenBack = createGraphics(480, 420, {pixelDensity: displayDensity()});
+  let offscreenCanvas = createGraphics(207, 449, {pixelDensity: displayDensity()});
 
   offscreenBack.clear();
   offscreenCanvas.clear();
-
   offscreenBack.background(255);
 
-  loadFont('./fonts/Gotham Black.otf', boldFont =>
-  loadFont('./fonts/Gotham Medium.ttf', medFont =>
+  loadFont('./fonts/Gotham Black.otf', (boldFont) => {
+    loadFont('./fonts/Gotham Medium.ttf', (medFont) => {
+      loadImage('./img/fondo-billete-ilustrado-BW-01.png', (img) => {
+        offscreenBack.image(img, sumMargin, sumMargin*2.5, width*scaleFactor, height*scaleFactor);
+        offscreenBack.background(255,100);
+        offscreenCanvas.image(canvas, 0, 0); 
+        offscreenBack.image(offscreenCanvas, sumMargin, sumMargin*2.5, width*scaleFactor, height*scaleFactor);
 
-  loadImage('./img/fondo-billete-ilustrado-BW-01.png', img => {
-    offscreenBack.image(img, sumMargin, sumMargin*2.5, width*scaleFactor, height*scaleFactor);
-    offscreenBack.background(255,100);
-    offscreenCanvas.image(canvas, 0, 0); 
-    offscreenBack.image(offscreenCanvas, sumMargin, sumMargin*2.5, width*scaleFactor, height*scaleFactor);
-
-    // textos título
+         // textos título
     offscreenBack.textAlign(LEFT, CENTER);
     offscreenBack.textFont(boldFont);
     offscreenBack.fill(0);
@@ -221,21 +215,19 @@ function saveSummary() {
       offscreenBack.text(typeLabels[i], width, sumMargin*5 + legSep*i + legSize*1.40);
     }
 
-    loadImage('./img/sello-pc-negro.png', logoPolCol => {
-      offscreenBack.image(logoPolCol, offscreenBack.width - sumMargin*2.5 , sumMargin/2, 36, 36);
 
-      loadImage('./img/pc_assets_logoOjos-hor.png', logoOjos => {
-        offscreenBack.image(logoOjos, sumMargin, sumMargin/2, 144, 41.48);
-      
-        // guardar png
-        saveCanvas(offscreenBack, `Billete ${localidad} ${año}`, 'png'); // Save the offscreen canvas as a .png file with the given name
-      })
- 
+        loadImage('./img/sello-pc-negro.png', (logoPolCol) => {
+          offscreenBack.image(logoPolCol, offscreenBack.width - sumMargin*2.5 , sumMargin/2, 36, 36);
 
-
-
-    })
-  })));
+          loadImage('./img/pc_assets_logoOjos-hor.png', (logoOjos) => {
+            offscreenBack.image(logoOjos, sumMargin, sumMargin/2, 144, 41.48);
+            // guardar png
+            saveCanvas(offscreenBack, `Billete ${localidad} ${año}`, 'png'); 
+          });
+        });
+      });
+    });
+  });
 }
 
 
